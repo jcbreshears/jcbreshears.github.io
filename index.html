@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Justin Breshears — Custom websites, built for you.</title>
+  <meta name="description" content="Freelance web developer crafting fast, thoughtful, custom websites for small businesses." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,400..600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="nav">
+    <a href="#top" class="nav__mark">JB</a>
+    <nav class="nav__links">
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero__inner">
+        <p class="eyebrow reveal">Justin Breshears &middot; Freelance Web Developer</p>
+        <h1 class="hero__title reveal">
+          Custom websites,<br />
+          <span class="accent">built for you.</span>
+        </h1>
+        <p class="hero__sub reveal">
+          I build fast, thoughtful sites for small businesses — no templates,
+          no bloat, just clean code and careful design.
+        </p>
+        <div class="hero__cta reveal">
+          <a href="#work" class="btn btn--primary">See my work</a>
+          <a href="#contact" class="btn btn--ghost">Start a project</a>
+        </div>
+      </div>
+      <div class="hero__glow" aria-hidden="true"></div>
+    </section>
+
+    <section id="work" class="section">
+      <header class="section__head reveal">
+        <p class="eyebrow">Selected Work</p>
+        <h2>A few recent projects.</h2>
+      </header>
+
+      <div class="grid">
+        <article class="card reveal">
+          <div class="card__media" data-label="Center Gifts">
+            <span class="card__placeholder">Coming soon</span>
+          </div>
+          <div class="card__body">
+            <div class="card__meta">
+              <span>E-commerce</span>
+              <span>2026</span>
+            </div>
+            <h3>Center Gifts</h3>
+            <p>A boutique gifting storefront focused on a warm, editorial browsing experience.</p>
+            <a class="card__link" href="#" aria-disabled="true">Case study soon &rarr;</a>
+          </div>
+        </article>
+
+        <article class="card reveal">
+          <div class="card__media card__media--alt" data-label="Handy Hands">
+            <span class="card__placeholder">Coming soon</span>
+          </div>
+          <div class="card__body">
+            <div class="card__meta">
+              <span>Local Services</span>
+              <span>2026</span>
+            </div>
+            <h3>Handy Hands</h3>
+            <p>A clean, trust-first marketing site for a local handyman service with booking flow.</p>
+            <a class="card__link" href="#" aria-disabled="true">Case study soon &rarr;</a>
+          </div>
+        </article>
+
+        <article class="card card--wide reveal">
+          <div class="card__body card__body--centered">
+            <p class="eyebrow">Your project here</p>
+            <h3>Have something in mind?</h3>
+            <p>I take on a small number of projects at a time so every site gets real attention.</p>
+            <a class="card__link" href="#contact">Let's talk &rarr;</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="about" class="section section--split">
+      <div class="reveal">
+        <p class="eyebrow">About</p>
+        <h2>Hi, I'm Justin.</h2>
+        <p class="lede">
+          I'm a freelance developer who believes a good website should feel
+          effortless — fast to load, easy to use, and a pleasure to look at.
+          But looking good isn't enough. A good website also has to do its
+          job: answer real questions, build trust, and turn visitors into
+          customers.
+        </p>
+        <p>
+          I work directly with business owners to build sites that are tailored
+          to their brand and genuinely useful to their customers. No drag-and-drop
+          templates. No unnecessary plugins. Just websites built the right way —
+          and for the right purpose.
+        </p>
+      </div>
+
+      <aside class="skills reveal">
+        <h3>What I do</h3>
+        <ul>
+          <li><strong>Custom websites</strong><span>Marketing sites &amp; landing pages</span></li>
+          <li><strong>Web apps &amp; portals</strong><span>Marketplaces, dashboards, bookings</span></li>
+          <li><strong>Modern frameworks</strong><span>Next.js, Astro, React</span></li>
+          <li><strong>Databases &amp; APIs</strong><span>Postgres, Supabase, REST</span></li>
+          <li><strong>Auth &amp; payments</strong><span>User accounts, Stripe</span></li>
+          <li><strong>E-commerce</strong><span>Shopify, custom storefronts</span></li>
+          <li><strong>Performance</strong><span>100/100 Lighthouse builds</span></li>
+          <li><strong>Hosting &amp; deploys</strong><span>Vercel, GitHub Pages, CI/CD</span></li>
+          <li class="skills__more">and more&hellip;</li>
+        </ul>
+      </aside>
+    </section>
+
+    <section id="contact" class="section section--contact">
+      <div class="reveal">
+        <p class="eyebrow">Contact</p>
+        <h2>Got a project in mind?</h2>
+        <p class="lede">
+          Tell me a little about your business and what you need — I'll get back
+          to you within a day.
+        </p>
+        <a class="btn btn--primary btn--lg" href="mailto:justincbreshears@gmail.com">Start a project</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p>&copy; <span id="year"></span> Justin Breshears. Custom websites, built for you.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
