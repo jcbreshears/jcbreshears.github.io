@@ -279,7 +279,10 @@ p { margin: 0 0 1em; color: var(--ink-soft); }
 .card:hover .card__media--image .card__placeholder { transform: translateX(3px); }
 
 .card__media--cg {
-  background-image: url("assets/center-gifts.png");
+  background-image: image-set(
+    url("assets/center-gifts.webp") type("image/webp"),
+    url("assets/center-gifts.png") type("image/png")
+  );
   background-color: #f3ece0;
 }
 .card__placeholder {
