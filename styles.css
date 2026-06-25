@@ -341,6 +341,13 @@ p { margin: 0 0 1em; color: var(--ink-soft); }
   );
   background-color: #000;
 }
+.card__media--hh {
+  background-image: image-set(
+    url("assets/handyhands.webp") type("image/webp"),
+    url("assets/handyhands.png") type("image/png")
+  );
+  background-color: #3a1d6e;
+}
 
 /* Project screenshot cards */
 .card__media--image {
