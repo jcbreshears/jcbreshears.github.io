@@ -392,6 +392,15 @@ img, picture, svg { display: block; max-width: 100%; }
 .pl--lead { stroke: #5D719C; stroke-dasharray: 5 4; }
 .nd { fill: #101A2E; stroke: #7D8CA8; stroke-width: 1.5; }
 .nd--live { fill: #8A9461; stroke: #8A9461; }
+/* Outline sweep. Rests at opacity 0, so with motion off or JS dead it adds
+   nothing rather than sitting there as a stray mark. */
+.tr {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  opacity: 0;
+}
 .pl__label {
   font-family: var(--f-mono);
   font-size: 13px;
@@ -853,8 +862,21 @@ img, picture, svg { display: block; max-width: 100%; }
   html:not(.reduced-motion) .pl--lead { animation: fade .5s var(--ease-decisive) both .75s; }
   @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
 
+  /* Outline sweep — a single short dash walking the plate edge. --len comes
+     from JS, so the travel distance is exactly the path length and the loop
+     has no seam. */
+  html:not(.reduced-motion) .tr {
+    opacity: 1;
+    animation: trace 9s linear infinite 1.35s;
+  }
+  @keyframes trace {
+    from { stroke-dashoffset: 0; }
+    to   { stroke-dashoffset: calc(var(--len, 1240) * -1px); }
+  }
+
   /* Infinite motion is an infinite repaint: park it once the hero is off
      screen rather than animating behind the rest of the page. */
+  .hero__plan.is-idle .tr,
   .hero__plan.is-idle .plan__draw .nd--live,
   .hero__plan.is-idle .plan__draw { animation-play-state: paused; }
   html:not(.reduced-motion) .plan__draw .nd {
@@ -864,30 +886,33 @@ img, picture, svg { display: block; max-width: 100%; }
   @keyframes pop { from { opacity: 0; transform: scale(.4); } to { opacity: 1; transform: scale(1); } }
   .plan__draw .nd { transform-box: fill-box; transform-origin: center; }
 
-  /* THE SURVEYOR. The olive dot leaves the intersection, walks the plate —
-     every segment running along a line that is actually drawn — touches all
-     four corner nodes, and comes home. Keyframe percentages are proportional
-     to segment length (96 · 96 · 240 · 384 · 240 · 288 · 96 = 1440 units) so a
-     linear timing function gives genuinely constant speed instead of visibly
-     hurrying the short legs.
+  /* THE SURVEYOR. The olive dot sweeps the plate's two INTERIOR cross lines —
+     out along the horizontal, back through the crossing to its far end, home,
+     then the same on the vertical — pausing briefly at each end. It is kept
+     off the outline deliberately: that track belongs to the sweep above, and
+     two accent marks orbiting the same rectangle read as clutter.
 
-     Two things this selector has to get right: it must carry `.plan__draw` so
-     it is not outranked by the `.nd` pop rule above, and it must sit AFTER
-     that rule to win the tie. `translate` is used rather than `transform` so
-     the walk composes with the pop-in's scale instead of replacing it. */
+     Keyframe percentages are proportional to leg length
+     (288 · 384 · 96 · 96 · 240 · 144 = 1248 units, 76% of the cycle) with a
+     4% dwell at each of the six stops, so linear timing gives constant speed
+     instead of visibly hurrying the short legs.
+
+     Two things this selector has to get right: it must carry `.plan__draw` or
+     the `.nd` pop rule above outranks it, and it must sit AFTER that rule to
+     win the tie. It animates `translate`, not `transform`, so the sweep
+     composes with the pop-in's scale instead of replacing it. */
   html:not(.reduced-motion) .plan__draw .nd--live {
     animation: pop .5s var(--ease-spring) both calc(480ms + var(--i, 0) * 90ms),
-               survey 22s linear infinite 1.6s;
+               survey 18s linear infinite 1.6s;
   }
   @keyframes survey {
-    0%     { translate: 0 0; }
-    6.67%  { translate: 0 -96px; }
-    13.33% { translate: -96px -96px; }
-    30%    { translate: -96px 144px; }
-    56.67% { translate: 288px 144px; }
-    73.33% { translate: 288px -96px; }
-    93.33% { translate: 0 -96px; }
-    100%   { translate: 0 0; }
+    0%,     4%    { translate: 0 0; }        /* the crossing — home */
+    21.5%,  25.5% { translate: 288px 0; }    /* horizontal, right end */
+    48.9%,  52.9% { translate: -96px 0; }    /* horizontal, left end */
+    58.7%,  62.7% { translate: 0 0; }        /* back through the crossing */
+    68.5%,  72.5% { translate: 0 -96px; }    /* vertical, top */
+    87.1%,  91.1% { translate: 0 144px; }    /* vertical, bottom */
+    100%          { translate: 0 0; }
   }
 
   /* Pointer response — the plan notices the cursor. Capped at 10px. */
