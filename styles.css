@@ -103,20 +103,20 @@
 
   /* Colour — INK ROOM is the default. Sections re-declare these to re-theme
      every component inside them without a single component-level override. */
-  --bg: #0A0C10;
-  --bg-raise: #12161C;
-  --line: #232A34;
-  --line-soft: #191E26;
-  --fg: #EDF0F4;
-  --fg-mute: #949FAD;
-  --accent: #FF5A1F;
-  --on-accent: #12060B;
-  --sel: rgba(255, 90, 31, .26);
+  --bg: #101A2E;
+  --bg-raise: #172339;
+  --line: #2B3A56;
+  --line-soft: #1E2B44;
+  --fg: #EDF1F7;
+  --fg-mute: #9AA8BF;
+  --accent: #8A9461;
+  --on-accent: #101A2E;
+  --sel: rgba(138, 148, 97, .28);
 }
 
-/* PAPER ROOM. Note the accent is a different hex here: #FF5A1F clears AA on
-   the dark ground (6.3:1) and fails badly on paper (2.8:1), so the token
-   re-resolves to a darker burnt orange rather than the accent being dropped. */
+/* PAPER ROOM. Note the accent is a different hex here: the ink room's #8A9461
+   clears AA on navy (5.37:1) and would fail on cream, so the token re-resolves
+   to a darker olive rather than the accent being dropped. */
 .approach,
 .about {
   --bg: #F4F1EA;
@@ -125,12 +125,13 @@
   --line-soft: #E3DCCE;
   --fg: #14181E;
   --fg-mute: #55606E;
-  /* #C23A00 cleared AA on --bg (4.77:1) and FAILED on --bg-raise (4.29:1).
-     A colour has to be measured against the darkest ground it actually lands
-     on, not the one it was designed against. #B33500 is 5.43:1 / 4.88:1. */
-  --accent: #B33500;
+  /* A colour has to be measured against the darkest ground it actually lands
+     on, not the one it was designed against. The brand olive #6B7545 reaches
+     only 4.38:1 on --bg and 3.93:1 on --bg-raise, so it fails AA as text on
+     cream; #5C6438 is the same hue at 5.62:1 / 5.05:1. */
+  --accent: #5C6438;
   --on-accent: #F7F5F0;
-  --sel: rgba(179, 53, 0, .18);
+  --sel: rgba(92, 100, 56, .20);
 }
 
 /* ── 3. Base ────────────────────────────────────────────────────────────── */
@@ -140,7 +141,7 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: calc(var(--nav-h) + 1rem);
-  background: #0A0C10;
+  background: #101A2E;
   -webkit-text-size-adjust: 100%;
 }
 
@@ -266,7 +267,7 @@ img, picture, svg { display: block; max-width: 100%; }
               transform var(--dur-fast) var(--ease-standard);
 }
 .btn--primary { background: var(--accent); color: var(--on-accent); }
-.btn--primary:hover { background: #ff713f; }
+.btn--primary:hover { background: #9AA471; }
 .btn--ghost { border-color: var(--line); color: var(--fg); }
 .btn--ghost:hover { border-color: var(--fg); background: var(--bg-raise); }
 .btn--sm { padding: .6rem 1.05rem; font-size: var(--step--2); }
@@ -315,7 +316,7 @@ img, picture, svg { display: block; max-width: 100%; }
   align-items: center;
   gap: clamp(1rem, 4vw, 2.5rem);
   padding-inline: var(--gutter);
-  background: color-mix(in srgb, #0A0C10 78%, transparent);
+  background: color-mix(in srgb, #101A2E 76%, transparent);
   backdrop-filter: saturate(150%) blur(12px);
   -webkit-backdrop-filter: saturate(150%) blur(12px);
   border-bottom: 1px solid transparent;
@@ -323,24 +324,24 @@ img, picture, svg { display: block; max-width: 100%; }
               background var(--dur-base) var(--ease-standard);
 }
 .nav.is-scrolled {
-  border-bottom-color: #232A34;
-  background: color-mix(in srgb, #0A0C10 92%, transparent);
+  border-bottom-color: #2B3A56;
+  background: color-mix(in srgb, #101A2E 92%, transparent);
 }
 .nav__mark {
   font-family: var(--f-mono);
   font-size: var(--step--1);
   font-weight: 600;
   letter-spacing: .06em;
-  color: #EDF0F4;
+  color: #EDF1F7;
   text-decoration: none;
-  border: 1px solid #232A34;
+  border: 1px solid #2B3A56;
   border-radius: 8px;
   padding: .6rem .68rem;
   line-height: 1;
   transition: border-color var(--dur-base) var(--ease-standard),
               color var(--dur-base) var(--ease-standard);
 }
-.nav__mark:hover { border-color: #FF5A1F; color: #FF5A1F; }
+.nav__mark:hover { border-color: #A8B37A; color: #A8B37A; }
 .nav__links {
   display: flex;
   gap: clamp(1rem, 3vw, 2rem);
@@ -348,7 +349,7 @@ img, picture, svg { display: block; max-width: 100%; }
 }
 .nav__links a {
   font-size: var(--step--1);
-  color: #EDF0F4;
+  color: #EDF1F7;
   text-decoration: none;
   /* Sized for a thumb, not a mouse: this brings the hit area to ~44px, well
      past the 24px WCAG 2.2 minimum, without changing the visual height. */
@@ -372,7 +373,7 @@ img, picture, svg { display: block; max-width: 100%; }
   content: "";
   position: absolute;
   inset: -20% 40% 30% -20%;
-  background: radial-gradient(closest-side, rgba(255, 90, 31, .10), transparent 72%);
+  background: radial-gradient(closest-side, rgba(138, 148, 97, .13), transparent 72%);
   z-index: -2;
   pointer-events: none;
 }
@@ -382,24 +383,24 @@ img, picture, svg { display: block; max-width: 100%; }
   position: absolute;
   inset: 0;
   z-index: -1;
-  color: #3A4657;
+  color: #2C3C5C;
   pointer-events: none;
 }
 .hero__plan svg { width: 100%; height: 100%; }
-.plan__draw { fill: none; stroke: #46536A; stroke-width: 1.25; }
-.pl--dim { stroke: #55637C; }
-.pl--lead { stroke: #55637C; stroke-dasharray: 5 4; }
-.nd { fill: #0A0C10; stroke: #6B7A96; stroke-width: 1.5; }
-.nd--live { fill: #FF5A1F; stroke: #FF5A1F; }
+.plan__draw { fill: none; stroke: #4A5C82; stroke-width: 1.25; }
+.pl--dim { stroke: #5D719C; }
+.pl--lead { stroke: #5D719C; stroke-dasharray: 5 4; }
+.nd { fill: #101A2E; stroke: #7D8CA8; stroke-width: 1.5; }
+.nd--live { fill: #8A9461; stroke: #8A9461; }
 .pl__label {
   font-family: var(--f-mono);
   font-size: 13px;
   letter-spacing: .22em;
-  fill: #6B7A96;
+  fill: #7D8CA8;
   /* Same value as `fill` so contrast tooling, which samples `color` on SVG
-     text, reads the colour actually painted (4.52:1 on the hero ground)
+     text, reads the colour actually painted (5.12:1 on the hero ground)
      instead of the inherited grid colour. */
-  color: #6B7A96;
+  color: #7D8CA8;
   stroke: none;
   text-anchor: middle;
 }

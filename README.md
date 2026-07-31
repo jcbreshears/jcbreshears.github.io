@@ -47,9 +47,11 @@ blanking it.
 or a hard-coded font size.
 
 **Colour rooms.** Sections re-declare `--bg`/`--fg`/`--accent` rather than
-components overriding themselves. The accent resolves to a *different hex* in
-the light room — `#FF5A1F` clears WCAG AA on the dark ground (6.28:1) and fails
-badly on paper (2.77:1), so the paper room uses `#B33500`.
+components overriding themselves. The accent resolves to a *different hex* per
+room: `#8A9461` on the navy ground (5.37:1 on `--bg`, 4.88:1 on `--bg-raise`),
+`#5C6438` on cream (5.62:1 / 5.05:1). The brand olive `#6B7545` is deliberately
+**not** used as text on cream — it only reaches 4.38:1 and fails AA. Change one
+room's accent without re-measuring the other and the page stops passing.
 
 **Motion is additive.** Every animation lives inside
 `@media (prefers-reduced-motion: no-preference)`. The resting layout, the
@@ -88,5 +90,6 @@ font swap is actually visible in.
 | JavaScript | 12.2 KB | | < 50 KB |
 | Total transferred | 193 KB | | |
 
-Contrast: **41/41 text styles pass WCAG AA**, swept live against composited
-backgrounds rather than declared token pairs.
+Contrast: **every text style passes WCAG AA** (41/41 on the last sweep; the
+count varies with which hover/active states are live at capture). Swept against
+composited backgrounds rather than declared token pairs.
