@@ -1,0 +1,14 @@
+{
+  "name": "jcbreshears-portfolio",
+  "private": true,
+  "type": "module",
+  "description": "Source for jcbreshears.github.io. The site itself has no build step — these dependencies exist only to regenerate the project previews.",
+  "scripts": {
+    "shots": "node tools/refresh-shots.mjs",
+    "serve": "npx --yes http-server -p 8099 -c-1"
+  },
+  "devDependencies": {
+    "playwright": "^1.62.0",
+    "sharp": "^0.34.0"
+  }
+}

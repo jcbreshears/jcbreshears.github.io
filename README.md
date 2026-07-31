@@ -1,26 +1,92 @@
-# Justin Breshears — Portfolio
+# jcbreshears.github.io
 
-Custom websites, built for you.
+Justin Breshears — portfolio. Live at <https://jcbreshears.github.io/>.
 
-A single-page portfolio site. Plain HTML, CSS, and JavaScript — no build step.
+Plain HTML, CSS and JavaScript. **The site itself has no build step**: the three
+files at the root are what gets served. Push to `main` and GitHub Pages
+publishes it.
+
+## Files
+
+| Path | What it is |
+|---|---|
+| `index.html` | All markup and copy |
+| `styles.css` | All styling, tokenised (see below) |
+| `script.js` | ~12 KB, no dependencies, entirely progressive enhancement |
+| `assets/fonts/` | Self-hosted Instrument Serif + Inter (latin subsets) |
+| `assets/work/` | Project previews, AVIF + WebP at 1520w and 760w |
+| `assets/og.png` | Link-preview card for when the URL is shared |
+| `tools/refresh-shots.mjs` | Re-shoots the project previews |
 
 ## Local preview
 
-Just open `index.html` in a browser, or run a quick static server:
-
 ```bash
-npx serve .
+npm run serve      # http://127.0.0.1:8099
 ```
 
-## Deploy to GitHub Pages
+Or just open `index.html` — everything is relative and same-origin.
 
-1. Create a new public repo on GitHub (e.g. `justinbreshears.github.io` for a user site, or any name for a project site).
-2. Push this folder's contents to the repo's `main` branch.
-3. In the repo: **Settings → Pages → Source → Deploy from branch → `main` / `/ (root)`**.
-4. Your site will be live at `https://<username>.github.io/` (user site) or `https://<username>.github.io/<repo>/` (project site).
+## Refreshing the project previews
 
-## Structure
+When a client site changes, re-shoot it. `index.html` never needs editing;
+it references the previews through `<picture>`/`srcset`.
 
-- `index.html` — markup and content
-- `styles.css` — all styling
-- `script.js` — scroll reveals + sticky nav state
+```bash
+npm install        # once — playwright + sharp, dev only
+npm run shots                     # all six
+npm run shots -- heirloom skeg    # just these
+```
+
+A site that fails to load leaves its existing preview in place rather than
+blanking it.
+
+## How it's put together
+
+**Tokens.** Motion is two curves and four durations; type is one fluid
+`clamp()` ladder (`--step--2` … `--step-7`). Nothing has a bespoke transition
+or a hard-coded font size.
+
+**Colour rooms.** Sections re-declare `--bg`/`--fg`/`--accent` rather than
+components overriding themselves. The accent resolves to a *different hex* in
+the light room — `#FF5A1F` clears WCAG AA on the dark ground (6.28:1) and fails
+badly on paper (2.77:1), so the paper room uses `#B33500`.
+
+**Motion is additive.** Every animation lives inside
+`@media (prefers-reduced-motion: no-preference)`. The resting layout, the
+reduced-motion layout and the no-JS layout are the same layout — there is
+nothing to "switch off".
+
+**The headline split** ships two copies: one intact and visually hidden for
+assistive tech, copy/paste and find-in-page; one split into per-word spans and
+`aria-hidden`. The splitter walks text nodes only, so the accented word
+survives. If it throws, the original markup is restored. An inline head script
+carries a 1.2s dead-man's switch so the headline can never stay invisible.
+
+**Fallback font metrics are computed, not copied.** `size-adjust` and the
+ascent/descent/line-gap overrides in `styles.css` were derived from the real
+`.woff2` files — average advance width weighted by English letter frequency,
+measured against Arial, with the overrides divided by the size-adjust ratio.
+Cross-check: the same method puts Inter at 107.47% against `next/font`'s
+published 107.12%. **Regenerate them if a font file changes; never hand-tune.**
+
+**The measurement panel is real.** It reads `largest-contentful-paint`,
+`layout-shift` and the resource timings out of the visitor's own browser. The
+observers are registered in the `<head>`, before anything renders, because
+registering them from the deferred script can miss entries.
+
+## Measured
+
+Local, warm renderer; and throttled to 200 KB/s at 150 ms RTT — the condition a
+font swap is actually visible in.
+
+| | Local | Throttled | Target |
+|---|---|---|---|
+| FCP / LCP | 52 ms | 1,116 ms | < 2,500 ms |
+| CLS | 0 | 0.00035 | < 0.1 |
+| Requests | 11 | | |
+| Third-party requests | **0** | | |
+| JavaScript | 12.2 KB | | < 50 KB |
+| Total transferred | 193 KB | | |
+
+Contrast: **41/41 text styles pass WCAG AA**, swept live against composited
+backgrounds rather than declared token pairs.
