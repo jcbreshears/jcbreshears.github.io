@@ -392,6 +392,23 @@ img, picture, svg { display: block; max-width: 100%; }
 .pl--lead { stroke: #5D719C; stroke-dasharray: 5 4; }
 .nd { fill: #101A2E; stroke: #7D8CA8; stroke-width: 1.5; }
 .nd--live { fill: #8A9461; stroke: #8A9461; }
+/* Tracer + node ring: resting state is invisible, so with motion off or JS
+   dead they add nothing rather than sitting there as stray marks. */
+.tr {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  opacity: 0;
+}
+.ndr {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+}
 .pl__label {
   font-family: var(--f-mono);
   font-size: 13px;
@@ -799,12 +816,6 @@ img, picture, svg { display: block; max-width: 100%; }
   align-items: baseline;
 }
 .foot p { margin: 0; font-size: var(--step--2); color: var(--fg-mute); }
-.foot__colophon {
-  font-family: var(--f-mono);
-  letter-spacing: .02em;
-  max-width: 58ch;
-  line-height: 1.7;
-}
 
 /* ── 12. Motion (additive only) ─────────────────────────────────────────────
    Everything above is the resting, reduced-motion and no-JS state. Motion is
@@ -844,7 +855,9 @@ img, picture, svg { display: block; max-width: 100%; }
      1.9s of line-draw and only started the nodes at 900ms, so the hero was
      still assembling itself two seconds in — long enough that a quick scroll
      past it saw an unfinished drawing. */
-  html:not(.reduced-motion) .plan__draw .pl {
+  /* The leader is excluded: it carries its own 5/4 dash, which this rule's
+     dasharray would otherwise overwrite and render solid. */
+  html:not(.reduced-motion) .plan__draw .pl:not(.pl--lead) {
     stroke-dasharray: var(--len, 1400);
     stroke-dashoffset: 0;
     animation: draw 1.35s var(--ease-decisive) both;
@@ -853,6 +866,40 @@ img, picture, svg { display: block; max-width: 100%; }
     from { stroke-dashoffset: var(--len, 1400); }
     to   { stroke-dashoffset: 0; }
   }
+
+  /* Leader fades in, then its dashes march toward SHIP. Shifting a periodic
+     pattern by exactly one period (5 + 4) loops with no visible seam. */
+  html:not(.reduced-motion) .pl--lead {
+    animation: fade .5s var(--ease-decisive) both .75s,
+               march 1s linear infinite 1.25s;
+  }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes march { to { stroke-dashoffset: -9px; } }
+
+  /* One short dash walking the plate outline. --len comes from JS, so the
+     travel distance is exactly the path length and the loop is seamless. */
+  html:not(.reduced-motion) .tr {
+    opacity: 1;
+    animation: trace 9s linear infinite 1.35s;
+  }
+  @keyframes trace {
+    from { stroke-dashoffset: 0; }
+    to   { stroke-dashoffset: calc(var(--len, 1240) * -1px); }
+  }
+
+  /* Slow ping off the live node. */
+  html:not(.reduced-motion) .ndr { animation: ping 3.6s var(--ease-decisive) infinite 1.6s; }
+  @keyframes ping {
+    0%        { transform: scale(1);   opacity: .55; }
+    70%, 100% { transform: scale(3.4); opacity: 0; }
+  }
+
+  /* Infinite motion is an infinite repaint: park it once the hero is off
+     screen rather than animating behind the rest of the page. */
+  .hero__plan.is-idle .tr,
+  .hero__plan.is-idle .ndr,
+  .hero__plan.is-idle .pl--lead,
+  .hero__plan.is-idle .plan__draw { animation-play-state: paused; }
   html:not(.reduced-motion) .plan__draw .nd {
     animation: pop .5s var(--ease-spring) both;
     animation-delay: calc(480ms + var(--i, 0) * 90ms);

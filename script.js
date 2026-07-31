@@ -101,10 +101,25 @@
     var plan = $(".hero__plan");
     if (!plan || !motionOK) return;
 
-    each($$(".plan__draw .pl", plan), function (el) {
+    each($$(".plan__draw .pl, .plan__draw .tr", plan), function (el) {
       if (typeof el.getTotalLength !== "function") return;
-      try { el.style.setProperty("--len", String(Math.ceil(el.getTotalLength()))); } catch (e) {}
+      try {
+        var len = Math.ceil(el.getTotalLength());
+        el.style.setProperty("--len", String(len));
+        /* The tracer is a single short dash with a gap covering the rest of
+           the outline, so exactly one dot travels the path at a time. */
+        if (el.classList.contains("tr")) {
+          el.style.strokeDasharray = 42 + " " + Math.max(1, len - 42);
+        }
+      } catch (e) {}
     });
+
+    /* Park the looping animations while the hero is off screen. */
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { plan.classList.toggle("is-idle", !e.isIntersecting); });
+      }, { rootMargin: "120px" }).observe(plan);
+    }
 
     if (!hoverOK) return;
     var draw = $(".plan__draw", plan);
